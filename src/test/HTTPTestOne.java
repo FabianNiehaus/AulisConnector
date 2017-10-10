@@ -1,16 +1,12 @@
 package test;
 
-import javax.tools.JavaCompiler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Scanner;
-
-import static jdk.nashorn.internal.runtime.regexp.joni.Syntax.Java;
 
 public class HTTPTestOne {
 
@@ -21,7 +17,13 @@ public class HTTPTestOne {
 
     private String query;
 
-    public HTTPTestOne() {
+    public static void main(String[] args){
+
+        HTTPTestOne httpTestOne = new HTTPTestOne();
+
+    }
+
+    private HTTPTestOne() {
         try {
             query = String.format("param1=%s&param2=%s",
                     URLEncoder.encode(param1, charset),
@@ -29,9 +31,15 @@ public class HTTPTestOne {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+        try {
+            fireHTTPRequest();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void fireHTTPRequest() throws IOException {
+    private void fireHTTPRequest() throws IOException {
         URLConnection connection = new URL(url + "?" + query).openConnection();
         connection.setRequestProperty("Accept-Charset", charset);
         InputStream response = connection.getInputStream();
