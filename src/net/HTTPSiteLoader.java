@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-class HTTPSiteLoader extends HTTPParentClass {
+public class HTTPSiteLoader extends HTTPParentClass {
 
-    String getHTTP(String url) throws IOException {
+    public String getHTTP(String url) throws IOException {
         URL obj = new URL(url);
         conn = (HttpsURLConnection) obj.openConnection();
 

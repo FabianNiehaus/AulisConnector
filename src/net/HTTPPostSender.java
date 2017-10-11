@@ -6,9 +6,9 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-class HTTPPostSender extends HTTPParentClass {
+public class HTTPPostSender extends HTTPParentClass {
 
-    void sendPost(String url, String postParams) throws Exception {
+    public void sendPost(String url, String postParams) throws Exception {
 
         URL obj = new URL(url);
         conn = (HttpsURLConnection) obj.openConnection();
@@ -21,8 +21,10 @@ class HTTPPostSender extends HTTPParentClass {
         conn.setRequestProperty("Accept",
                 "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
         conn.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-        for (String cookie : cookies) {
-            conn.addRequestProperty("Cookie", cookie.split(";", 1)[0]);
+        if(cookies != null) {
+            for (String cookie : cookies) {
+                conn.addRequestProperty("Cookie", cookie.split(";", 1)[0]);
+            }
         }
         conn.setRequestProperty("Connection", "keep-alive");
         conn.setRequestProperty("Referer", "https://accounts.google.com/ServiceLoginAuth");

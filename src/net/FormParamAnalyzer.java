@@ -10,9 +10,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-class FormParamAnalyzer {
+public class FormParamAnalyzer {
 
-    String getFormParams(String html, String username, String password)
+    public String getFormParams(String html, String username, String password, List<String> elementIDList)
             throws UnsupportedEncodingException {
 
         System.out.println("Extracting form's data...");
@@ -20,34 +20,23 @@ class FormParamAnalyzer {
         Document doc = Jsoup.parse(html);
 
         // Google form id
-
-
         List<String> paramList = new ArrayList<>();
 
-        Element loginform = doc.getElementById("il_prop_cont_username");
-        Elements inputElements = loginform.getElementsByTag("input");
-        for (Element inputElement : inputElements) {
-            String key = inputElement.attr("name");
-            String value = inputElement.attr("value");
+        for (String elementID : elementIDList){
+            Element loginform = doc.getElementById(elementID);
+            Elements inputElements = loginform.getElementsByTag("input");
+            for (Element inputElement : inputElements) {
+                String key = inputElement.attr("name");
+                String value = inputElement.attr("value");
 
-            if (key.equals("Email"))
-                value = username;
-            else if (key.equals("Passwd"))
-                value = password;
-            paramList.add(key + "=" + URLEncoder.encode(value, "UTF-8"));
-        }
+                if (key.equals("username"))
+                    value = username;
+                else if (key.equals("password"))
+                    value = password;
+                paramList.add(key + "=" + URLEncoder.encode(value, "UTF-8"));
 
-        loginform = doc.getElementById("il_prop_cont_password");
-        inputElements = loginform.getElementsByTag("input");
-        for (Element inputElement : inputElements) {
-            String key = inputElement.attr("name");
-            String value = inputElement.attr("value");
-
-            if (key.equals("Email"))
-                value = username;
-            else if (key.equals("Passwd"))
-                value = password;
-            paramList.add(key + "=" + URLEncoder.encode(value, "UTF-8"));
+                //System.out.println(key + ": " + value);
+            }
         }
 
         // build parameters list
@@ -60,5 +49,16 @@ class FormParamAnalyzer {
             }
         }
         return result.toString();
+    }
+
+    public Document getDocument(String html){
+        return Jsoup.parse(html);
+    }
+
+    public boolean checkLogin(String html, String elementID){
+        Document doc = Jsoup.parse(html);
+
+        if (doc.getElementById(elementID) != null){return true;}
+        else {return false;}
     }
 }
